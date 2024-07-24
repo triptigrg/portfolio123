@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-ZB7LzhppGnzqfV6TuRzB99n0BKhmKszQ/6+SSrToiKWHxJ7obL8f9D9RM2Jh0xMw" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="form.css">
+</head>
+<body>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <!-- Sign up form -->
+        <form action="insert.php" method="POST" onsubmit="return validateForm();">
+            <!-- Form fields -->
+            <input type="text" placeholder="Name" name="Name" id="Name">
+            <input type="email" placeholder="Email" name="Email" id="Email" onpaste="return false;">
+            <input type="password" placeholder="Password" name="Password" id="Password" onpaste="return false;">
+            <input type="hidden" name="register">
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <!-- Sign in form -->
+        <form action="fetch.php" method="POST" onsubmit="return validateSignIn();">
+            <!-- Form fields -->
+            <input type="email" placeholder="Email" name="Email" id="email" onpaste="return false;">
+            <input type="password" placeholder="Password" name="Password" id="password" onpaste="return false;">
+            <input type="hidden" name="login">
+            <div class="g-recaptcha" data-sitekey="6LfiAvMpAAAAAPPnKYysZCGnYYeJTJM0H1QEgMzz"></div>
+            <!-- Remember Me checkbox -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+            <label class="form-check-label" for="rememberMe">Remember Me</label>
+        </div>
+            <!-- Forgot password link -->
+            <a href="#" id="forgotPasswordLink" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot your password?</a>
+            <!-- Sign in button -->
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <!-- Overlay container -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <!-- Left panel -->
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <!-- Right panel -->
+            <div class="overlay-panel overlay-right">
+                <h1>Hello, Friend!</h1>
+                <p>Enter your personal details</p>
+                <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Your Password?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="reset_password.php" method="post">
+          <div class="mb-3">
+            <label for="resetEmail" class="form-label">Enter your email:</label>
+            <input type="email" class="form-control" id="resetEmail" name="resetEmail" required>
+          </div>
+          <button type="submit" class="btn btn-primary" name="reset">Reset Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+    container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+    container.classList.remove("right-panel-active");
+});
+
+forgotPasswordLink.addEventListener('click', () => {
+    // Reset the email field in the modal when it's opened
+    document.getElementById('resetEmail').value = '';
+});
+
+function validateForm() {
+    var name = document.getElementById('Name').value;
+    var email = document.getElementById('Email').value;
+    var password = document.getElementById('Password').value;
+
+    if (name.trim() === '') {
+        alert('Please enter your name');
+        return false;
+    }
+    if (email.trim() === '') {
+        alert('Please enter your email');
+        return false;
+    }
+    if (password.trim() === '') {
+        alert('Please enter your password');
+        return false;
+    }
+    return true;
+}
+
+function validateSignIn() {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    if (email.trim() === '') {
+        alert('Please enter your email');
+        return false;
+    }
+    if (password.trim() === '') {
+        alert('Please enter your password');
+        return false;
+    }
+    return true;
+}
+
+
+function validateSignIn() {
+    // Validate captcha
+    var captchaResponse = document.getElementById('g-recaptcha-response').value;
+    if (!captchaResponse) {
+        alert('Please complete the captcha verification.');
+        return false;
+    }
+
+    // Validate email and password
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    if (email.trim() === '') {
+        alert('Please enter your email');
+        return false;
+    }
+    if (password.trim() === '') {
+        alert('Please enter your password');
+        return false;
+    }
+
+    // If all validations pass, allow form submission
+    return true;
+}
+
+
+// Function to clear form fields
+function clearFormFields() {
+    document.getElementById('Name').value = '';
+    document.getElementById('Email').value = '';
+    document.getElementById('Password').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('rememberMe').checked = false;
+}
+
+// Clear form fields when the page is loaded or refreshed
+window.addEventListener('load', clearFormFields);
+
+// Check if remember me is checked and populate email and password fields
+document.addEventListener('DOMContentLoaded', function() {
+    var rememberMeCheckbox = document.getElementById('rememberMe');
+    var emailField = document.getElementById('email');
+    var passwordField = document.getElementById('password');
+
+    // Check if remember me was previously checked
+    if (localStorage.getItem('rememberMe') === 'true') {
+        rememberMeCheckbox.checked = true;
+        emailField.value = localStorage.getItem('email');
+        // Password is stored encrypted for security
+        passwordField.value = localStorage.getItem('password');
+    }
+
+    // Add event listener to remember me checkbox
+    rememberMeCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            // Save email and password to local storage
+            localStorage.setItem('rememberMe', true);
+            localStorage.setItem('email', emailField.value);
+            // Encrypt password before saving to local storage
+            localStorage.setItem('password', btoa(passwordField.value));
+        } else {
+            // Clear email and password from local storage
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('email');
+            localStorage.removeItem('password');
+        }
+    });
+});
+
+function validateForm() {
+    var name = document.getElementById('Name').value;
+    var email = document.getElementById('Email').value;
+    var password = document.getElementById('Password').value;
+
+    // Regular expression to allow only alphabets and spaces
+    var nameRegex = /^[a-zA-Z\s]*$/;
+
+    if (name.trim() === '') {
+        alert('Please enter your name');
+        return false;
+    }
+    // Check if name contains only alphabets and spaces
+    if (!nameRegex.test(name)) {
+        alert('Name should only contain alphabets and spaces');
+        return false;
+    }
+    if (email.trim() === '') {
+        alert('Please enter your email');
+        return false;
+    }
+    if (password.trim() === '') {
+        alert('Please enter your password');
+        return false;
+    }
+    return true;
+}
+
+</script>
+
+</body>
+</html>
